@@ -64,3 +64,33 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("Server listening on port:", PORT);
 });
+
+app.post("/file/upload", uploadStrategy, (req, res) => {
+  try {
+
+      axios       //should fix link
+          .post("https://azure-kg-funtion.azurewebsites.net/api/HttpTrigger1", {
+              filedata: req.file.buffer,
+              filename: req.file.originalname,
+          })
+          .then((info) => {
+              if (info.status === 200) {
+                  return res.status(200).json({
+
+                      message: 'Image Uploaded Successfully!',
+                      statusCode: 200
+                  });
+              } else {
+                  return res.status(200).json({
+                      data: null,
+                      message: 'Image Upload failed!',
+                      statusCode: 400
+                  });
+              }
+          }).catch(e => {
+          console.log(e);
+      });
+
+  } catch (err) {
+  }
+});
