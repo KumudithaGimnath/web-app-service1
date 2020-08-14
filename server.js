@@ -5,12 +5,14 @@ const cors = require("cors");
 
 const dotenv = require("dotenv");
 dotenv.config();
+const multer = require("multer");
+const inMemorySotorage = multer.memoryStorage();
+const uploadStrategy = multer({storage: inMemorySotorage}).single('image');
 
 const app = express();
 app.use(cors());
 
 // setup redis client
-
 const client = redis.createClient({
   port: process.env.REDIS_PORT,
   host: process.env.REDIS_HOST,
